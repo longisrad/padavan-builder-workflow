@@ -1,14 +1,21 @@
 #!/bin/bash
 SRC="padavan-ng/trunk"
 
-# 1. Copy script khởi động chính (my_init.sh phải nằm trong thư mục gốc của Repo)
+# Đảm bảo các thư mục tồn tại trước khi copy
 mkdir -p "$SRC/user/scripts"
-cp my_init.sh "$SRC/user/scripts/custom_init.sh"
-chmod +x "$SRC/user/scripts/custom_init.sh"
-
-# 2. Tạo file cấu hình DNS tích hợp
-# Chúng ta ghi vào dnsmasq.conf để nạp file hosts và chặn các tên miền theo dõi
 mkdir -p "$SRC/user/dnsmasq"
+mkdir -p "$SRC/user/init"
+
+# Kiểm tra file nguồn trước khi copy
+if [ -f "my_init.sh" ]; then
+    cp my_init.sh "$SRC/user/scripts/custom_init.sh"
+    chmod +x "$SRC/user/scripts/custom_init.sh"
+else
+    echo "Lỗi: Không tìm thấy file my_init.sh trong repo!"
+    exit 1
+fi
+
+# Ghi nội dung cấu hình dnsmasq
 {
     echo "addn-hosts=/etc/storage/dnsmasq/abpvn.hosts"
     echo "address=/update.miui.com/0.0.0.0"
@@ -25,4 +32,8 @@ mkdir -p "$SRC/user/dnsmasq"
     echo "address=/andlink.10086.cn/0.0.0.0"
     echo "address=/api.miwifi.com/0.0.0.0"
     echo "address=/data.mistat.xiaomi.com/0.0.0.0"
-} >> "$SRC/user/dnsmas
+} >> "$SRC/user/dnsmasq/dnsmasq.conf"
+
+# Đăng ký script khởi động
+echo 'sh /etc/storage/custom_init.sh &' > "$SRC/user/init/S99_custom_init"
+chmod +x "$SRC/user/init/S99_custom_init"
