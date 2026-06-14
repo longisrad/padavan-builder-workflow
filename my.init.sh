@@ -30,7 +30,7 @@ tc class add dev ifb0 parent 1: classid 1:1 htb rate ${DOWNLINK}kbit
 tc class add dev ifb0 parent 1:1 classid 1:10 htb rate ${DOWNLINK}kbit ceil ${DOWNLINK}kbit
 tc qdisc add dev ifb0 parent 1:10 handle 10: fq_codel limit 1000 target 5ms interval 100ms
 
-=========================================================
+#=========================================================
 # LUỒNG CAO CẤP V17: HOÀN THIỆN ĐỒNG BỘ CACHE 8192 & BLOCK ADS
 # =========================================================
 (
