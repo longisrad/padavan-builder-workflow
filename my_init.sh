@@ -1,12 +1,12 @@
 #!/bin/sh
 
-# 2. FIREWALL CÔ LẬP
+# 1. FIREWALL CÔ LẬP
 iptables -A INPUT -i $WAN_IF -s 192.168.1.1 -j ACCEPT
 iptables -A INPUT -i $WAN_IF -s 192.168.1.0/24 -j DROP
 iptables -A FORWARD -i $WAN_IF -s 192.168.1.0/24 -d 192.168.123.0/24 -j DROP
 logger -t "【BẢO MẬT】" "Đã cô lập dải mạng 192.168.1.x!"
 
-# 1. BIẾN CẤU HÌNH
+# 2. BIẾN CẤU HÌNH
 WAN_IF=$(nvram get wan0_ifname)
 [ -z "$WAN_IF" ] && WAN_IF="eth3"
 DOWNLINK=220000
